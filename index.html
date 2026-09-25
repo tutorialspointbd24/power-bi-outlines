@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power BI Course | Tutorials Point Bangladesh</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="logos.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-base:      #070D1A;
+            --bg-surface:   #0E1628;
+            --bg-card:      #131E33;
+            --bg-card-alt:  #0A1221;
+            --cyan:         #06B6D4;
+            --cyan-dim:     rgba(6, 182, 212, 0.15);
+            --cyan-glow:    rgba(6, 182, 212, 0.35);
+            --indigo:       #6366F1;
+            --indigo-dim:   rgba(99, 102, 241, 0.12);
+            --red:          #C62828;
+            --amber:        #F59E0B;
+            --amber-warm:   #F97316;
+            --text-1:       #F0F6FF;
+            --text-2:       #94A3B8;
+            --text-3:       #64748B;
+            --border:       rgba(255,255,255,0.07);
+            --border-accent:rgba(6, 182, 212, 0.4);
+            --radius-card:  18px;
+            --radius-sm:    10px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg-base);
+            color: var(--text-1);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ──────────────────────────────
+           ANIMATED GRID BACKGROUND
+        ────────────────────────────── */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.055) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.055) 1px, transparent 1px);
+            background-size: 52px 52px;
+            mask-image: radial-gradient(ellipse 90% 80% at 50% 0%, #000 60%, transparent 100%);
+        }
+
+        .grid-glow {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse 70% 50% at 15% 30%, rgba(6,182,212,0.09) 0%, transparent 65%),
+                radial-gradient(ellipse 60% 45% at 85% 75%, rgba(99,102,241,0.08) 0%, transparent 65%),
+                radial-gradient(ellipse 50% 40% at 50% 100%, rgba(198,40,40,0.05) 0%, transparent 60%);
+        }
+
+        /* ──────────────────────────────
+           LAYOUT
+        ────────────────────────────── */
+        main {
+            position: relative;
+            z-index: 1;
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 4rem 2rem 5rem;
+        }
+
+        /* ──────────────────────────────
+           HERO
+        ────────────────────────────── */
+        .hero {
+            text-align: center;
+            margin-bottom: 5rem;
+            animation: fadeDown 0.9s cubic-bezier(.22,1,.36,1) both;
+        }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(6,182,212,0.1);
+            border: 1px solid rgba(6,182,212,0.3);
+            color: var(--cyan);
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 0.45rem 1.1rem;
+            border-radius: 40px;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-eyebrow::before {
+            content: '';
+            display: inline-block;
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--cyan);
+            box-shadow: 0 0 8px var(--cyan);
+            animation: pulse 1.4s ease-in-out infinite;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.4rem, 5vw, 4rem);
+            font-weight: 900;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #e0f7ff 0%, var(--cyan) 45%, var(--indigo) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-sub {
+            font-size: 1.05rem;
+            color: var(--text-2);
+            max-width: 580px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .hero-divider {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--cyan), var(--indigo));
+            border-radius: 4px;
+            margin: 1.8rem auto;
+        }
+
+        /* ──────────────────────────────
+           SECTION HEADERS
+        ────────────────────────────── */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2.2rem;
+            padding-bottom: 1.4rem;
+            border-bottom: 1px solid var(--border-accent);
+        }
+
+        .section-icon {
+            width: 50px; height: 50px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--cyan), var(--indigo));
+            color: #fff;
+            box-shadow: 0 0 22px rgba(6,182,212,0.45);
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-size: 1.7rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--text-1);
+        }
+
+        .course-section {
+            margin-bottom: 4.5rem;
+            animation: fadeUp 0.8s cubic-bezier(.22,1,.36,1) both;
+        }
+        .course-section:nth-child(1) { animation-delay: 0.1s; }
+        .course-section:nth-child(2) { animation-delay: 0.2s; }
+
+        /* ──────────────────────────────
+           TABLES
+        ────────────────────────────── */
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: var(--radius-card);
+            border: 1px solid var(--border);
+            box-shadow: 0 0 40px rgba(6,182,212,0.12), inset 0 1px 0 rgba(255,255,255,0.04);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 560px;
+        }
+
+        .data-table thead tr {
+            background: linear-gradient(90deg, rgba(6,182,212,0.22), rgba(99,102,241,0.18));
+            border-bottom: 1px solid var(--border-accent);
+        }
+
+        .data-table th {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--cyan);
+        }
+
+        .data-table tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+        }
+
+        .data-table tbody tr:last-child { border-bottom: none; }
+
+        .data-table tbody tr:hover {
+            background: rgba(6,182,212,0.05);
+        }
+
+        .data-table td {
+            padding: 0.85rem 1.25rem;
+            font-size: 0.9rem;
+            color: var(--text-2);
+        }
+
+        .data-table td:first-child {
+            color: var(--cyan);
+            font-weight: 600;
+        }
+
+        /* Striped subtlety */
+        .data-table tbody tr:nth-child(even) {
+            background: rgba(255,255,255,0.015);
+        }
+
+        /* ──────────────────────────────
+           COURSE GRID + CARDS
+        ────────────────────────────── */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .course-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-card);
+            padding: 1.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* Subtle corner grid decoration */
+        .course-card::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 110px; height: 110px;
+            background-image:
+                linear-gradient(rgba(6,182,212,0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6,182,212,0.1) 1px, transparent 1px);
+            background-size: 18px 18px;
+            mask-image: radial-gradient(circle at top right, #000 30%, transparent 75%);
+            pointer-events: none;
+        }
+
+        .course-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--border-accent);
+            box-shadow: 0 20px 50px rgba(6,182,212,0.18), 0 0 0 1px rgba(6,182,212,0.15);
+        }
+
+        .week-badge {
+            display: inline-block;
+            background: linear-gradient(90deg, var(--cyan), var(--indigo));
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            padding: 0.3rem 0.85rem;
+            border-radius: 30px;
+            margin-bottom: 1rem;
+            width: fit-content;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-1);
+            margin-bottom: 1rem;
+            line-height: 1.4;
+            letter-spacing: -0.01em;
+        }
+
+        .objective-box {
+            background: rgba(6,182,212,0.07);
+            border-left: 3px solid var(--cyan);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            padding: 0.8rem 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .objective-box strong {
+            display: block;
+            color: var(--cyan);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 0.35rem;
+        }
+
+        .objective-box p {
+            color: var(--text-2);
+            font-size: 0.87rem;
+            line-height: 1.55;
+        }
+
+        .topics-label {
+            font-size: 0.73rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-3);
+            margin-bottom: 0.65rem;
+        }
+
+        .topics-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .topics-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            font-size: 0.875rem;
+            color: var(--text-2);
+            line-height: 1.5;
+            padding: 0.35rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .topics-list li:last-child { border-bottom: none; }
+
+        .topics-list li::before {
+            content: '▸';
+            color: var(--cyan);
+            font-size: 0.75rem;
+            margin-top: 0.2rem;
+            flex-shrink: 0;
+        }
+
+        /* ──────────────────────────────
+           CTA SECTION
+        ────────────────────────────── */
+        .cta-wrapper {
+            position: relative;
+            z-index: 1;
+            margin-top: 2rem;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow:
+                0 30px 60px -15px rgba(0,0,0,0.6),
+                0 0 0 1px rgba(255,255,255,0.06),
+                0 0 80px rgba(198,40,40,0.12);
+        }
+
+        /* Grid on CTA */
+        .cta-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+            background-size: 34px 34px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .cta-banner {
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(110deg, #7f0000 0%, #b91c1c 40%, #991b1b 100%);
+            padding: 1.4rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .cta-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .megaphone {
+            font-size: 2.2rem;
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+            animation: sway 1.8s ease-in-out infinite;
+            transform-origin: center bottom;
+        }
+
+        .cta-title {
+            background: #FFB300;
+            color: #1a0f00;
+            font-size: 1.15rem;
+            font-weight: 800;
+            padding: 0.3rem 1.1rem;
+            border-radius: 40px;
+            letter-spacing: -0.01em;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .cta-sub {
+            font-size: 0.82rem;
+            color: rgba(255,230,230,0.88);
+            font-weight: 600;
+            margin-top: 5px;
+            letter-spacing: 0.02em;
+        }
+
+        .cta-seats {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,220,100,0.35);
+            backdrop-filter: blur(4px);
+            padding: 0.5rem 1.3rem;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #FFF3C0;
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            white-space: nowrap;
+        }
+
+        .pulse-dot {
+            width: 8px; height: 8px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            animation: pulse 1.3s ease-in-out infinite;
+            box-shadow: 0 0 8px #ff6b6b;
+        }
+
+        .cta-body {
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(135deg, #0d0d0d 0%, #1a1a2e 100%);
+            padding: 2.25rem 2rem 2.5rem;
+            text-align: center;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            background: linear-gradient(110deg, #F59E0B, #F97316);
+            color: #1a0c00;
+            font-size: 1.15rem;
+            font-weight: 800;
+            padding: 1rem 2.5rem;
+            border-radius: 80px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 12px 30px -8px rgba(249,115,22,0.55), 0 0 0 1px rgba(255,255,255,0.06);
+            transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            letter-spacing: -0.01em;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 22px 40px -10px rgba(249,115,22,0.65), 0 0 40px rgba(249,115,22,0.2);
+            background: linear-gradient(110deg, #fbbf24, #fb923c);
+        }
+
+        .cta-btn:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        .btn-arrow {
+            font-size: 1.2rem;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+
+        .cta-btn:hover .btn-arrow {
+            animation: arrowSlide 0.7s ease-in-out infinite;
+        }
+
+        .cta-deadline {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.2rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: var(--text-3);
+            font-size: 0.78rem;
+            font-weight: 500;
+            padding: 0.35rem 1.2rem;
+            border-radius: 30px;
+            letter-spacing: 0.02em;
+        }
+
+        .cta-deadline span { color: #f59e0b; font-weight: 700; }
+
+        /* ── Daily countdown ── */
+        .cta-countdown {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-top: 0.85rem;
+            background: rgba(198,40,40,0.12);
+            border: 1px solid rgba(255,107,107,0.35);
+            color: #ffd9d9;
+            font-size: 0.82rem;
+            font-weight: 600;
+            padding: 0.4rem 1.3rem;
+            border-radius: 30px;
+            letter-spacing: 0.02em;
+        }
+
+        .cta-countdown .countdown-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: #ff6b6b;
+            box-shadow: 0 0 8px #ff6b6b;
+            animation: pulse 1.3s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        .cta-countdown #countdown-timer {
+            color: #ffb300;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.04em;
+        }
+
+        /* ──────────────────────────────
+           FOOTER LINE
+        ────────────────────────────── */
+        .page-footer {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-3);
+            font-size: 0.82rem;
+            letter-spacing: 0.04em;
+        }
+
+        /* ──────────────────────────────
+           KEYFRAMES
+        ────────────────────────────── */
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-22px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(22px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50%       { opacity: 1;   transform: scale(1.15); }
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-6deg); }
+            50%       { transform: rotate(6deg) translateX(2px); }
+        }
+
+        @keyframes arrowSlide {
+            0%, 100% { transform: translateX(0); }
+            50%       { transform: translateX(7px); }
+        }
+
+        /* ──────────────────────────────
+           RESPONSIVE
+        ────────────────────────────── */
+        @media (max-width: 768px) {
+            main { padding: 2.5rem 1.25rem 4rem; }
+            .hero { margin-bottom: 3.5rem; }
+            .section-title { font-size: 1.35rem; }
+            .courses-grid { grid-template-columns: 1fr; }
+            .cta-banner { flex-direction: column; align-items: flex-start; }
+            .cta-seats { align-self: flex-start; }
+            .cta-btn { width: 100%; font-size: 1rem; }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 2rem; }
+            .section-icon { width: 42px; height: 42px; font-size: 1.2rem; }
+            .course-card { padding: 1.25rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation: none !important; transition: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Grid Background Layers -->
+<div class="grid-bg"></div>
+<div class="grid-glow"></div>
+
+<main>
+
+    <!-- ── HERO ── -->
+    <section class="hero">
+        <div class="hero-eyebrow">Tutorials Point Bangladesh</div>
+        <h1>Power BI Course Outline</h1>
+        <div class="hero-divider"></div>
+        <p class="hero-sub">সম্পূর্ণ Power BI যাত্রা — প্রি-রেকর্ডেড বেসিক থেকে AI-পাওয়ার্ড অ্যাডভান্সড অ্যানালিটিক্স ও প্রজেক্ট</p>
+    </section>
+
+    <!-- ── POWER BI PRE-RECORDED (সব টপিক) ── -->
+    <section class="course-section">
+        <div class="section-header">
+            <div class="section-icon"><i class="fas fa-chart-bar"></i></div>
+            <h2 class="section-title">প্রি-রেকর্ডেড ক্লাস — Power BI</h2>
+        </div>
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>পার্ট ০১</th>
+                        <th>পার্ট ০২</th>
+                        <th>পার্ট ০৩</th>
+                        <th>পার্ট ০৪</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Power BI Interface</td><td>Data Cleaning</td><td>DAX Basics</td><td>Advanced DAX</td></tr>
+                    <tr><td>Import Data</td><td>Query Editor</td><td>CALCULATE, FILTER</td><td>Iterator Functions</td></tr>
+                    <tr><td>Data Types</td><td>Remove Duplicates</td><td>SUM, SUMX</td><td>Context Transition</td></tr>
+                    <tr><td>Relationships</td><td>Change Data Types</td><td>Time Intelligence</td><td>Star Schema</td></tr>
+                    <tr><td>Basic Charts</td><td>Conditional Columns</td><td>YEAR, MONTH, DATEADD</td><td>Snowflake Schema</td></tr>
+                    <tr><td>Formatting</td><td>Merge &amp; Append</td><td>Measures vs Columns</td><td>RLS Setup</td></tr>
+                    <tr><td>Publish Report</td><td>Pivot &amp; Unpivot</td><td>Matrix &amp; KPI</td><td>Gateway &amp; Refresh</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ── 6 LIVE CLASSES: AI + PROJECT ONLY ── -->
+    <section class="course-section">
+        <div class="section-header">
+            <div class="section-icon"><i class="fas fa-robot"></i></div>
+            <h2 class="section-title">লাইভ ক্লাস — AI ও প্রজেক্ট (৬টি সেশন)</h2>
+        </div>
+        <div class="courses-grid">
+            <!-- ক্লাস ১ -->
+            <div class="course-card">
+                <div class="week-badge">লাইভ ০১</div>
+                <h3 class="card-title">AI-এর সাথে Power BI পরিচয়</h3>
+                <div class="objective-box">
+                    <strong>লক্ষ্য</strong>
+                    <p>Power BI-তে AI ভিজ্যুয়াল ও ইন্টিগ্রেশন ধারণা তৈরি।</p>
+                </div>
+                <div class="topics-label">মূল বিষয়</div>
+                <ul class="topics-list">
+                    <li>AI Visuals (Key Influencers, Decomposition Tree)</li>
+                    <li>Q&amp;A Visual সেটআপ</li>
+                    <li>Natural Language Query</li>
+                    <li>AI Insights ব্যবহার</li>
+                </ul>
+            </div>
+
+            <!-- ক্লাস ২ -->
+            <div class="course-card">
+                <div class="week-badge">লাইভ ০২</div>
+                <h3 class="card-title">AutoML ও Predictions</h3>
+                <div class="objective-box">
+                    <strong>লক্ষ্য</strong>
+                    <p>Power BI-তে AutoML ব্যবহার করে প্রেডিকশন মডেল তৈরি।</p>
+                </div>
+                <div class="topics-label">মূল বিষয়</div>
+                <ul class="topics-list">
+                    <li>AutoML Integration</li>
+                    <li>Binary Prediction</li>
+                    <li>General Classification</li>
+                    <li>Regression Model</li>
+                    <li>প্রজেক্ট: Sales Forecast</li>
+                </ul>
+            </div>
+
+            <!-- ক্লাস ৩ -->
+            <div class="course-card">
+                <div class="week-badge">লাইভ ০৩</div>
+                <h3 class="card-title">Cognitive Services ও AI Enrichment</h3>
+                <div class="objective-box">
+                    <strong>লক্ষ্য</strong>
+                    <p>Cognitive Services দিয়ে ডেটা এনরিচমেন্ট শেখা।</p>
+                </div>
+                <div class="topics-label">মূল বিষয়</div>
+                <ul class="topics-list">
+                    <li>Text Analytics Integration</li>
+                    <li>Sentiment Analysis</li>
+                    <li>Key Phrase Extraction</li>
+                    <li>Language Detection</li>
+                    <li>Image Tagging</li>
+                </ul>
+            </div>
+
+            <!-- ক্লাস ৪ -->
+            <div class="course-card">
+                <div class="week-badge">লাইভ ০৪</div>
+                <h3 class="card-title">AI-Powered DAX ও Python Visual</h3>
+                <div class="objective-box">
+                    <strong>লক্ষ্য</strong>
+                    <p>Python ও DAX একসাথে ব্যবহার করে অ্যাডভান্সড AI ভিজ্যুয়াল।</p>
+                </div>
+                <div class="topics-label">মূল বিষয়</div>
+                <ul class="topics-list">
+                    <li>Python Script Visual</li>
+                    <li>Matplotlib/Seaborn in Power BI</li>
+                    <li>Custom AI Measures</li>
+                    <li>R Visual Integration</li>
+                </ul>
+            </div>
+
+            <!-- ক্লাস ৫ -->
+            <div class="course-card">
+                <div class="week-badge">লাইভ ০৫</div>
+                <h3 class="card-title">AI Chatbot ও Power BI Embedded</h3>
+                <div class="objective-box">
+                    <strong>লক্ষ্য</strong>
+                    <p>Power BI-তে AI চ্যাটবট ও এমবেডেড অ্যানালিটিক্স।</p>
+                </div>
+                <div class="topics-label">মূল বিষয়</div>
+                <ul class="topics-list">
+                    <li>Power BI Embedded Overview</li>
+                    <li>AI Chatbot Integration</li>
+                    <li>Power Apps Visual</li>
+                    <li>Power Automate with AI</li>
+                </ul>
+            </div>
+
+            <!-- ক্লাস ৬ -->
+            <div class="course-card">
+                <div class="week-badge">লাইভ ০৬</div>
+                <h3 class="card-title">ক্যাপস্টোন প্রজেক্ট — AI ড্যাশবোর্ড</h3>
+                <div class="objective-box">
+                    <strong>লক্ষ্য</strong>
+                    <p>সম্পূর্ণ AI-পাওয়ার্ড বিজনেস ড্যাশবোর্ড তৈরি ও প্রেজেন্ট।</p>
+                </div>
+                <div class="topics-label">মূল বিষয়</div>
+                <ul class="topics-list">
+                    <li>End-to-End AI Dashboard</li>
+                    <li>Predictive Analytics</li>
+                    <li>Real-time Data Integration</li>
+                    <li>Storytelling with Data</li>
+                    <li>Presentation &amp; Review</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── CTA SECTION ── -->
+    <div class="cta-wrapper">
+        <div class="cta-banner">
+            <div class="cta-left">
+                <span class="megaphone">📢</span>
+                <div>
+                    <div class="cta-title">আজই এনরোল করুন</div>
+                    <div class="cta-sub">সরাসরি ক্লাস শুরু &nbsp;•&nbsp; সীমিত সুযোগ</div>
+                </div>
+            </div>
+            <div class="cta-seats">
+                <div class="pulse-dot"></div>
+                🎯 সীমিত আসন বাকি
+            </div>
+        </div>
+
+        <div class="cta-body">
+            <a href="https://tutorialspointbd.com/step/power-bi-checkout/" class="cta-btn" target="_blank">
+                ✋ এখানে ক্লিক করুন
+                <span class="btn-arrow">→</span>
+            </a>
+            <div>
+                <div class="cta-deadline">
+                    শেষ তারিখ: <span id="deadline-date">২২ জুন ২০২৬</span> &nbsp;|&nbsp; মাত্র <span>৪টি</span> সিট অবশিষ্ট
+                </div>
+                <br>
+                <div class="cta-countdown">
+                    <div class="countdown-dot"></div>
+                    অফারটি আজকেই শেষ হচ্ছে।  <span id="countdown-timer">০০:০০:০০</span> আর বাকি আছে। 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── FOOTER ── -->
+    <div class="page-footer">
+        Powered By Tutorials Point Bangladesh
+    </div>
+
+</main>
+
+<script>
+    // Intersection-observer staggered card reveal
+    const cards = document.querySelectorAll('.course-card');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12 });
+
+    cards.forEach((card, i) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = `opacity 0.55s ease ${i * 0.07}s, transform 0.55s ease ${i * 0.07}s, box-shadow 0.3s, border-color 0.3s`;
+        observer.observe(card);
+    });
+
+    // CTA click handler
+    document.getElementById('enrollBtn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        alert('🎓 ধন্যবাদ! আপনার এনরোলমেন্ট প্রক্রিয়া শুরু হয়েছে।');
+    });
+
+    // ── Dynamic "Last Date" — always shows today's date in Bengali ──
+    const bnMonths = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+    const enDigits = '0123456789';
+    const bnDigits = '০১২৩৪৫৬৭৮৯';
+
+    function toBengaliDigits(input) {
+        return String(input).split('').map(ch => {
+            const idx = enDigits.indexOf(ch);
+            return idx > -1 ? bnDigits[idx] : ch;
+        }).join('');
+    }
+
+    function renderTodayAsDeadline() {
+        const el = document.getElementById('deadline-date');
+        if (!el) return;
+        const now = new Date();
+        const day = toBengaliDigits(now.getDate());
+        const month = bnMonths[now.getMonth()];
+        const year = toBengaliDigits(now.getFullYear());
+        el.textContent = `${day} ${month} ${year}`;
+    }
+
+    // ── Daily 24-hour countdown — resets every midnight, ticks down every second ──
+    function renderDailyCountdown() {
+        const el = document.getElementById('countdown-timer');
+        if (!el) return;
+        const now = new Date();
+        const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+        let diffMs = endOfDay - now;
+        if (diffMs < 0) diffMs = 0;
+
+        const totalSeconds = Math.floor(diffMs / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        const pad = (n) => String(n).padStart(2, '0');
+        const formatted = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+        el.textContent = toBengaliDigits(formatted);
+    }
+
+    renderTodayAsDeadline();
+    renderDailyCountdown();
+    setInterval(() => {
+        renderDailyCountdown();
+    }, 1000);
+    // Refresh the date label once a minute too, in case the page stays open past midnight
+    setInterval(renderTodayAsDeadline, 60000);
+</script>
+</body>
+</html>
